@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+/// Etapas válidas: NO_VENDIDO | SEGUIMIENTO | POSIBLE_COMPRA | VENDIDO (ver src/lib/stages.ts)
+model Lead {
+  id        Int       @id @default(autoincrement())
+  fullName  String
+  /// Normalizado: +549XXXXXXXXXX
+  phone     String
+  stage     String
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  /// Se completa al pasar a VENDIDO y se borra al salir de esa etapa
+  soldAt    DateTime?
+
+  @@index([stage])
+  @@index([soldAt])
+}
+
+model MonthlyGoal {
+  id     Int @id @default(autoincrement())
+  year   Int
+  /// 1 a 12
+  month  Int
+  target Int
+
+  @@unique([year, month])
+}
