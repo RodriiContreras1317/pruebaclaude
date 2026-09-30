@@ -61,6 +61,8 @@ export function KanbanBoard({ leads }: { leads: LeadDTO[] }) {
 
   return (
     <DndContext
+      // ID fijo para que coincida entre servidor y cliente (evita un error de hidratación).
+      id="leads-kanban"
       sensors={sensors}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
