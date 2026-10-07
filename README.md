@@ -64,7 +64,7 @@ La base de datos se guarda en `prisma/dev.db` y está en `.gitignore`.
 - **Financiada:** siempre suma flete/formularios y patentamiento (puesto en calle). Con el anticipo del cliente, que incluye la prenda, calcula para cada producto y plazo el monto a financiar, la diferencia, la prenda, el anticipo y la cuota. Primero van los productos promo y después las líneas tradicionales.
   - Monto máximo: el menor entre el tope del producto, el LTV sobre el Precio Oficial y el puesto en calle.
   - Si el anticipo no alcanza, se financia el máximo y se marca el anticipo necesario. Con anticipo $0 se ven los mínimos anticipos.
-- Datos: `src/lib/presupuestos/lista.ts` (lista Fiat octubre 2026, vigencia 05/10) y `src/lib/presupuestos/productos.ts` (circular FCA N° 016.26).
+- Datos: `src/lib/presupuestos/lista.ts` (lista Fiat "OCTUBRE VIGENTE 0610", vigente desde el 06/10) y `src/lib/presupuestos/productos.ts` (circular FCA N° 016.26).
 
 ### Inicio (`/`)
 - Progreso del mes actual.

@@ -1,6 +1,6 @@
 /**
- * Lista de precios Fiat vigente: Circular Comercial 72/2026 – Octubre (N° 10/2026), vigencia 05/10/2026.
- * Fuente: hoja " Fiat Oct 26 Vig.05.10" del Excel de listas.
+ * Lista de precios Fiat vigente desde el 06/10/2026.
+ * Fuente: hoja "OCTUBRE VIGENTE 0610" del Excel de listas.
  *
  * - precioOficial: lista FCA (base del LTV).
  * - precioTaraborelli: referencia para el vendedor; el precio de la operación se carga a mano.
@@ -17,38 +17,38 @@ export type Vehiculo = {
   patentamiento: number;
 };
 
-export const LISTA_VIGENTE = "Lista Fiat Octubre 2026 · vigencia 05/10/2026";
+export const LISTA_VIGENTE = "Lista Fiat Octubre 2026 · vigente desde 06/10/2026";
 
 export const VEHICULOS: Vehiculo[] = [
-  { codigo: "00-341-AB1-0", modelo: "MOBI TREKKING 1.0", precioOficial: 30280000, precioTaraborelli: 28375388, fleteFormularios: 1211200, patentamiento: 1816800 },
-  { codigo: "00-341-ABB-0", modelo: "MOBI TREKKING 1.0 MT", precioOficial: 30280000, precioTaraborelli: 28375388, fleteFormularios: 1211200, patentamiento: 1816800 },
-  { codigo: "00-358-AF2-1", modelo: "ARGO DRIVE 1.3L MT MY26", precioOficial: 35470000, precioTaraborelli: 27450233, fleteFormularios: 1418800, patentamiento: 2128200 },
-  { codigo: "00-358-AFK-1", modelo: "ARGO DRIVE 1.3 CVT MY26", precioOficial: 37730000, precioTaraborelli: 30983876, fleteFormularios: 1509200, patentamiento: 2263800 },
-  { codigo: "00-359-AL2-1", modelo: "CRONOS LIKE 1.3 GSE MY26", precioOficial: 36650000, precioTaraborelli: 29466600, fleteFormularios: 1466000, patentamiento: 2199000 },
-  { codigo: "00-359-AF2-1", modelo: "CRONOS DRIVE 1.3 GSE PACK PLUS (OPT AQZ) MY26", precioOficial: 43121330, precioTaraborelli: 30400538, fleteFormularios: 1724853, patentamiento: 2587280 },
-  { codigo: "00-359-AFK-1", modelo: "CRONOS DRIVE 1.3 GSE CVT PACK PLUS (OPT AQZ) MY26", precioOficial: 44760000, precioTaraborelli: 32710608, fleteFormularios: 1790400, patentamiento: 2685600 },
-  { codigo: "00-359-AHK-1", modelo: "CRONOS PRECISION 1.3 GSE CVT MY26", precioOficial: 45270000, precioTaraborelli: 35804043, fleteFormularios: 1810800, patentamiento: 2716200 },
-  { codigo: "359-AK2-1", modelo: "CRONOS DRIVE PLUS 1.3 MT MY27", precioOficial: 39210000, precioTaraborelli: 32363934, fleteFormularios: 1568400, patentamiento: 2352600 },
+  { codigo: "00-341-AB1-0", modelo: "MOBI TREKKING 1.0", precioOficial: 30280000, precioTaraborelli: 28980988, fleteFormularios: 1211200, patentamiento: 1816800 },
+  { codigo: "00-341-ABB-0", modelo: "MOBI TREKKING 1.0 MT", precioOficial: 30280000, precioTaraborelli: 28980988, fleteFormularios: 1211200, patentamiento: 1816800 },
+  { codigo: "00-358-AF2-1", modelo: "ARGO DRIVE 1.3L MT MY26", precioOficial: 34100000, precioTaraborelli: 27071990, fleteFormularios: 1364000, patentamiento: 2046000 },
+  { codigo: "00-358-AFK-1", modelo: "ARGO DRIVE 1.3 CVT MY26", precioOficial: 36270000, precioTaraborelli: 30510324, fleteFormularios: 1450800, patentamiento: 2176200 },
+  { codigo: "00-359-AL2-1", modelo: "CRONOS LIKE 1.3 GSE MY26", precioOficial: 35100000, precioTaraborelli: 28922400, fleteFormularios: 1404000, patentamiento: 2106000 },
+  { codigo: "00-359-AF2-1", modelo: "CRONOS DRIVE 1.3 GSE PACK PLUS (OPT AQZ) MY26", precioOficial: 41300000, precioTaraborelli: 29942500, fleteFormularios: 1652000, patentamiento: 2478000 },
+  { codigo: "00-359-AFK-1", modelo: "CRONOS DRIVE 1.3 GSE CVT PACK PLUS (OPT AQZ) MY26", precioOficial: 42870000, precioTaraborelli: 32186796, fleteFormularios: 1714800, patentamiento: 2572200 },
+  { codigo: "00-359-AHK-1", modelo: "CRONOS PRECISION 1.3 GSE CVT MY26", precioOficial: 43520000, precioTaraborelli: 35290368, fleteFormularios: 1740800, patentamiento: 2611200 },
+  { codigo: "359-AK2-1", modelo: "CRONOS DRIVE PLUS 1.3 MT MY27", precioOficial: 37550000, precioTaraborelli: 31744770, fleteFormularios: 1502000, patentamiento: 2253000 },
   { codigo: "364B242", modelo: "FIAT 600 MHEV 1.2 AT", precioOficial: 49340000, precioTaraborelli: 38110216, fleteFormularios: 1973600, patentamiento: 2960400 },
-  { codigo: "00-363-BM4-1", modelo: "PULSE DRIVE 1.3 MT5 (MY26)", precioOficial: 43920000, precioTaraborelli: 33041016, fleteFormularios: 1756800, patentamiento: 2635200 },
-  { codigo: "00-363-BN6-1", modelo: "PULSE DRIVE 1.3 CVT (MY26)", precioOficial: 44550000, precioTaraborelli: 35617725, fleteFormularios: 1782000, patentamiento: 2673000 },
-  { codigo: "00-363-BP2-1", modelo: "PULSE AUDACE 1.0T CVT (MY26)", precioOficial: 47660000, precioTaraborelli: 37699060, fleteFormularios: 1906400, patentamiento: 2859600 },
-  { codigo: "00-363-BR2-1", modelo: "PULSE IMPETUS 1.0T CVT (MY26)", precioOficial: 49300000, precioTaraborelli: 40056250, fleteFormularios: 1972000, patentamiento: 2958000 },
-  { codigo: "00-363-BSY-1", modelo: "PULSE ABARTH T270 AT6 (MY26)", precioOficial: 50210000, precioTaraborelli: 44029149, fleteFormularios: 2008400, patentamiento: 3012600 },
-  { codigo: "00-376-BM8-1", modelo: "FASTBACK TURBO 270 AT6 (MY26)", precioOficial: 54250000, precioTaraborelli: 41202875, fleteFormularios: 2170000, patentamiento: 3255000 },
-  { codigo: "00-376-BN8-1", modelo: "FASTBACK ABARTH T270 AT6 (MY26)", precioOficial: 55750000, precioTaraborelli: 46489925, fleteFormularios: 2230000, patentamiento: 3345000 },
-  { codigo: "00-265-4PN-1", modelo: "FIORINO ENDURANCE 1.3L MT", precioOficial: 34510000, precioTaraborelli: 28139454, fleteFormularios: 1380400, patentamiento: 2070600 },
-  { codigo: "00-281-CKV-1", modelo: "STRADA FREEDOM 1.3 8V Cabina simple 1.3 8V MT", precioOficial: 38180000, precioTaraborelli: 32659172, fleteFormularios: 1527200, patentamiento: 2290800 },
-  { codigo: "00-281-DKV-1", modelo: "STRADA FREEDOM 1.3 8V CD", precioOficial: 44250000, precioTaraborelli: 34497300, fleteFormularios: 1770000, patentamiento: 2655000 },
-  { codigo: "00-281-DLW-1", modelo: "STRADA VOLCANO 1.3 8V CD CVT", precioOficial: 47240000, precioTaraborelli: 36015776, fleteFormularios: 1889600, patentamiento: 2834400 },
-  { codigo: "00-281-DNX-1", modelo: "STRADA RANCH T200 CVT", precioOficial: 52592800, precioTaraborelli: 40391270, fleteFormularios: 2103712, patentamiento: 3155568 },
-  { codigo: "00-281-DMX-1", modelo: "STRADA ULTRA T200 CD CVT", precioOficial: 52750000, precioTaraborelli: 40512000, fleteFormularios: 2110000, patentamiento: 3165000 },
-  { codigo: "00-226-5R9-2", modelo: "TORO FREEDOM 1.3T AT6 4X2 MY26", precioOficial: 55730000, precioTaraborelli: 43848364, fleteFormularios: 2229200, patentamiento: 3343800 },
-  { codigo: "00-226-5S9-2", modelo: "TORO VOLCANO 1.3T AT6 4X2 MY26", precioOficial: 61300000, precioTaraborelli: 47703660, fleteFormularios: 2452000, patentamiento: 3678000 },
-  { codigo: "00-226-5ST-2", modelo: "TORO VOLCANO 2.2 TD AT9 4x4 MY26", precioOficial: 64150000, precioTaraborelli: 55618050, fleteFormularios: 2566000, patentamiento: 3849000 },
-  { codigo: "00-579-1C4-3", modelo: "TITANO ENDURANCE MT", precioOficial: 54480000, precioTaraborelli: 44809800, fleteFormularios: 2179200, patentamiento: 3268800 },
-  { codigo: "00-579-1C5-3", modelo: "TITANO ENDURANCE MT 4WD", precioOficial: 59390000, precioTaraborelli: 50641853, fleteFormularios: 2375600, patentamiento: 3563400 },
-  { codigo: "00-579-1H5-3", modelo: "TITANO FREEDOM MT 4WD", precioOficial: 65390000, precioTaraborelli: 50134513, fleteFormularios: 2615600, patentamiento: 3923400 },
-  { codigo: "00-579-1H6-3", modelo: "TITANO FREEDOM PLUS AT8 AWD", precioOficial: 69720000, precioTaraborelli: 57044904, fleteFormularios: 2788800, patentamiento: 4183200 },
-  { codigo: "00-579-1N6-3", modelo: "TITANO RANCH AT AWD", precioOficial: 75270000, precioTaraborelli: 60291270, fleteFormularios: 3010800, patentamiento: 4516200 },
+  { codigo: "00-363-BM4-1", modelo: "PULSE DRIVE 1.3 MT5 (MY26)", precioOficial: 42230000, precioTaraborelli: 32614229, fleteFormularios: 1689200, patentamiento: 2533800 },
+  { codigo: "00-363-BN6-1", modelo: "PULSE DRIVE 1.3 CVT (MY26)", precioOficial: 42830000, precioTaraborelli: 35099185, fleteFormularios: 1713200, patentamiento: 2569800 },
+  { codigo: "00-363-BP2-1", modelo: "PULSE AUDACE 1.0T CVT (MY26)", precioOficial: 45820000, precioTaraborelli: 37160020, fleteFormularios: 1832800, patentamiento: 2749200 },
+  { codigo: "00-363-BR2-1", modelo: "PULSE IMPETUS 1.0T CVT (MY26)", precioOficial: 47400000, precioTaraborelli: 39460500, fleteFormularios: 1896000, patentamiento: 2844000 },
+  { codigo: "00-363-BSY-1", modelo: "PULSE ABARTH T270 AT6 (MY26)", precioOficial: 48270000, precioTaraborelli: 43293363, fleteFormularios: 1930800, patentamiento: 2896200 },
+  { codigo: "00-376-BM8-1", modelo: "FASTBACK TURBO 270 AT6 (MY26)", precioOficial: 52160000, precioTaraborelli: 40658720, fleteFormularios: 2086400, patentamiento: 3129600 },
+  { codigo: "00-376-BN8-1", modelo: "FASTBACK ABARTH T270 AT6 (MY26)", precioOficial: 53600000, precioTaraborelli: 45769040, fleteFormularios: 2144000, patentamiento: 3216000 },
+  { codigo: "00-265-4PN-1", modelo: "FIORINO ENDURANCE 1.3L MT", precioOficial: 33180000, precioTaraborelli: 27718572, fleteFormularios: 1327200, patentamiento: 1990800 },
+  { codigo: "00-281-CKV-1", modelo: "STRADA FREEDOM 1.3 8V Cabina simple 1.3 8V MT", precioOficial: 36710000, precioTaraborelli: 32135934, fleteFormularios: 1468400, patentamiento: 2202600 },
+  { codigo: "00-281-DKV-1", modelo: "STRADA FREEDOM 1.3 8V CD", precioOficial: 42540000, precioTaraborelli: 34014984, fleteFormularios: 1701600, patentamiento: 2552400 },
+  { codigo: "00-281-DLW-1", modelo: "STRADA VOLCANO 1.3 8V CD CVT", precioOficial: 45420000, precioTaraborelli: 35536608, fleteFormularios: 1816800, patentamiento: 2725200 },
+  { codigo: "00-281-DNX-1", modelo: "STRADA RANCH T200 CVT", precioOficial: 50570000, precioTaraborelli: 39849160, fleteFormularios: 2022800, patentamiento: 3034200 },
+  { codigo: "00-281-DMX-1", modelo: "STRADA ULTRA T200 CD CVT", precioOficial: 50720000, precioTaraborelli: 39967360, fleteFormularios: 2028800, patentamiento: 3043200 },
+  { codigo: "00-226-5R9-2", modelo: "TORO FREEDOM 1.3T AT6 4X2 MY26", precioOficial: 53580000, precioTaraborelli: 43228344, fleteFormularios: 2143200, patentamiento: 3214800 },
+  { codigo: "00-226-5S9-2", modelo: "TORO VOLCANO 1.3T AT6 4X2 MY26", precioOficial: 58940000, precioTaraborelli: 47045908, fleteFormularios: 2357600, patentamiento: 3536400 },
+  { codigo: "00-226-5ST-2", modelo: "TORO VOLCANO 2.2 TD AT9 4x4 MY26", precioOficial: 61680000, precioTaraborelli: 54710160, fleteFormularios: 2467200, patentamiento: 3700800 },
+  { codigo: "00-579-1C4-3", modelo: "TITANO ENDURANCE MT", precioOficial: 52380000, precioTaraborelli: 44130150, fleteFormularios: 2095200, patentamiento: 3142800 },
+  { codigo: "00-579-1C5-3", modelo: "TITANO ENDURANCE MT 4WD", precioOficial: 57100000, precioTaraborelli: 49831170, fleteFormularios: 2284000, patentamiento: 3426000 },
+  { codigo: "00-579-1H5-3", modelo: "TITANO FREEDOM MT 4WD", precioOficial: 62870000, precioTaraborelli: 49459829, fleteFormularios: 2514800, patentamiento: 3772200 },
+  { codigo: "00-579-1H6-3", modelo: "TITANO FREEDOM PLUS AT8 AWD", precioOficial: 67030000, precioTaraborelli: 56184546, fleteFormularios: 2681200, patentamiento: 4021800 },
+  { codigo: "00-579-1N6-3", modelo: "TITANO RANCH AT AWD", precioOficial: 72370000, precioTaraborelli: 59415770, fleteFormularios: 2894800, patentamiento: 4342200 },
 ];

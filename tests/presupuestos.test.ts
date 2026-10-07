@@ -80,7 +80,7 @@ describe("calcularFinanciado", () => {
   it("suma flete y patentamiento siempre", () => {
     const titano = vehiculo("TITANO ENDURANCE MT 4WD");
     const r = calcularFinanciado(titano, 50_000_000, 20_000_000);
-    expect(r.puestoEnCalle).toBe(50_000_000 + 2_375_600 + 3_563_400);
+    expect(r.puestoEnCalle).toBe(50_000_000 + 2_284_000 + 3_426_000);
   });
 
   it("promos primero y filtra por modelo", () => {
