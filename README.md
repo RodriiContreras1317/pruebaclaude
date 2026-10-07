@@ -58,6 +58,14 @@ La base de datos se guarda en `prisma/dev.db` y está en `.gitignore`.
 - Plan semanal con fechas, días hábiles, plan original, plan ajustado, ventas reales y estado de cada semana: *cumplida*, *en curso*, *atrasada* o *pendiente*.
 - Barra de progreso del mes con el porcentaje.
 
+### Presupuestos (`/presupuestos`)
+- Primero se elige **Financiada** o **Contado**, después el vehículo. Se muestra el **Precio Taraborelli** de la lista vigente como referencia; el precio de la operación se carga a mano.
+- **Contado:** checkboxes de *Flete / Formularios* y *Patentamiento*, total y nota al pie según lo elegido.
+- **Financiada:** siempre suma flete/formularios y patentamiento (puesto en calle). Con el anticipo del cliente, que incluye la prenda, calcula para cada producto y plazo el monto a financiar, la diferencia, la prenda, el anticipo y la cuota. Primero van los productos promo y después las líneas tradicionales.
+  - Monto máximo: el menor entre el tope del producto, el LTV sobre el Precio Oficial y el puesto en calle.
+  - Si el anticipo no alcanza, se financia el máximo y se marca el anticipo necesario. Con anticipo $0 se ven los mínimos anticipos.
+- Datos: `src/lib/presupuestos/lista.ts` (lista Fiat octubre 2026, vigencia 05/10) y `src/lib/presupuestos/productos.ts` (circular FCA N° 016.26).
+
 ### Inicio (`/`)
 - Progreso del mes actual.
 - Ventas necesarias esta semana (según el plan ajustado) y cuántas llevás.
@@ -92,6 +100,7 @@ src/
     page.tsx             Inicio
     leads/               Kanban y tabla, alta, edición y server actions
     objetivos/           Plan mensual y server action del objetivo
+    presupuestos/        Presupuestos de contado y financiados
   components/            Componentes de interfaz
   lib/
     planning.ts          Semanas, reparto y replanificación
@@ -100,5 +109,6 @@ src/
     dates.ts             Fechas en hora de Argentina
     goals.ts, leads.ts   Consultas a la base de datos
     db.ts                Cliente de Prisma
+    presupuestos/        Lista de precios, productos FCA y cálculos
 tests/                   Tests unitarios (Vitest)
 ```

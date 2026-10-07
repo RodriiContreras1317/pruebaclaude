@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, TargetIcon, UsersIcon } from "./icons";
+import { CalculatorIcon, HomeIcon, TargetIcon, UsersIcon } from "./icons";
 
 const LINKS = [
   { href: "/", label: "Inicio", icon: HomeIcon },
   { href: "/leads", label: "Leads", icon: UsersIcon },
   { href: "/objetivos", label: "Objetivos", icon: TargetIcon },
+  { href: "/presupuestos", label: "Presupuestos", icon: CalculatorIcon },
 ] as const;
 
 function useIsActive() {
@@ -42,7 +43,7 @@ export function SideNav() {
 export function MobileNav() {
   const isActive = useIsActive();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-3 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
       {LINKS.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}
