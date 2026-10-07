@@ -1,6 +1,6 @@
 /**
- * Lista de precios Fiat vigente desde el 06/10/2026.
- * Fuente: hoja "OCTUBRE VIGENTE 0610" del Excel de listas.
+ * Lista de precios incluida en la app (se usa hasta que se cargue otra desde /presupuestos).
+ * Fuente: hoja "OCTUBRE VIGENTE 0610" del Excel de listas, vigente desde el 06/10/2026.
  *
  * - precioOficial: lista FCA (base del LTV).
  * - precioTaraborelli: referencia para el vendedor; el precio de la operación se carga a mano.
@@ -17,7 +17,7 @@ export type Vehiculo = {
   patentamiento: number;
 };
 
-export const LISTA_VIGENTE = "Lista Fiat Octubre 2026 · vigente desde 06/10/2026";
+export const LISTA_BASE = "OCTUBRE VIGENTE 0610";
 
 export const VEHICULOS: Vehiculo[] = [
   { codigo: "00-341-AB1-0", modelo: "MOBI TREKKING 1.0", precioOficial: 30280000, precioTaraborelli: 28980988, fleteFormularios: 1211200, patentamiento: 1816800 },

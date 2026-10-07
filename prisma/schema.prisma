@@ -33,3 +33,19 @@ model MonthlyGoal {
 
   @@unique([year, month])
 }
+
+/// Circular FCA o lista de precios cargada para presupuestos. Se usa la última de cada tipo.
+model FuentePresupuesto {
+  id        Int      @id @default(autoincrement())
+  /// "circular" | "lista"
+  tipo      String
+  /// Ej.: "Circular 016.26 · Octubre 2026" o el nombre de la hoja de la lista
+  nombre    String
+  /// Nombre del archivo subido
+  archivo   String
+  /// JSON: productos (circular) o vehículos (lista)
+  datos     String
+  createdAt DateTime @default(now())
+
+  @@index([tipo, createdAt])
+}

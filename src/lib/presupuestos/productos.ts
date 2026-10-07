@@ -1,5 +1,7 @@
 /**
  * Productos FCA 0 km — Circular Comercial N° 016.26, vigencia octubre 2026.
+ * Es la definición base: al cargar una circular nueva se actualizan tasas, aportes,
+ * coeficientes y topes (ver parse-circular.ts); LTV y modelos habilitados salen de acá.
  *
  * coeficiente: cuota cada $1.000 financiados, con IVA y sin seguro.
  * aporteCE: quebranto que cobra la financiera; el costo prendario es
@@ -22,6 +24,8 @@ export type Producto = {
   aclaracion?: string;
   plazos: Plazo[];
 };
+
+export const CIRCULAR_BASE = "Circular 016.26 · Octubre 2026";
 
 export const SELLADO_PRENDA = 0.02;
 export const IVA = 0.21;

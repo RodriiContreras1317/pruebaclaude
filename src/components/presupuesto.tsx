@@ -9,8 +9,10 @@ import {
   parsePesos,
   type OpcionFinanciacion,
 } from "@/lib/presupuestos/calculo";
-import { LISTA_VIGENTE, VEHICULOS, type Vehiculo } from "@/lib/presupuestos/lista";
-import { MONTO_MINIMO } from "@/lib/presupuestos/productos";
+import type { Fuentes } from "@/lib/presupuestos/fuentes";
+import type { Vehiculo } from "@/lib/presupuestos/lista";
+import { MONTO_MINIMO, type Producto } from "@/lib/presupuestos/productos";
+import { PresupuestoFuentes, type FuentesElegidas } from "./presupuesto-fuentes";
 import { Card, buttonStyles } from "./ui";
 
 type Operacion = "financiada" | "contado";
@@ -18,7 +20,28 @@ type Operacion = "financiada" | "contado";
 const inputStyles =
   "mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base shadow-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-200 md:text-sm";
 
-export function Presupuesto() {
+export function Presupuesto({ fuentes }: { fuentes: Fuentes }) {
+  const [elegidas, setElegidas] = useState<FuentesElegidas | null>(null);
+
+  if (!elegidas) return <PresupuestoFuentes fuentes={fuentes} onListo={setElegidas} />;
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm">
+        <span className="text-slate-600">
+          <strong className="text-slate-900">{elegidas.circular.nombre}</strong> · Lista{" "}
+          <strong className="text-slate-900">{elegidas.lista.nombre}</strong>
+        </span>
+        <button type="button" onClick={() => setElegidas(null)} className="font-medium text-sky-700 hover:underline">
+          Cambiar
+        </button>
+      </div>
+      <Operacion vehiculos={elegidas.lista.vehiculos} productos={elegidas.circular.productos} />
+    </div>
+  );
+}
+
+function Operacion({ vehiculos, productos }: { vehiculos: Vehiculo[]; productos: Producto[] }) {
   const [operacion, setOperacion] = useState<Operacion | null>(null);
   const [codigoIndex, setCodigoIndex] = useState<string>("");
   const [precio, setPrecio] = useState(0);
@@ -26,7 +49,7 @@ export function Presupuesto() {
   const [conFyF, setConFyF] = useState(true);
   const [conPatentamiento, setConPatentamiento] = useState(true);
 
-  const vehiculo: Vehiculo | undefined = codigoIndex === "" ? undefined : VEHICULOS[Number(codigoIndex)];
+  const vehiculo: Vehiculo | undefined = codigoIndex === "" ? undefined : vehiculos[Number(codigoIndex)];
 
   return (
     <div className="space-y-5">
@@ -55,7 +78,7 @@ export function Presupuesto() {
               Vehículo
               <select value={codigoIndex} onChange={(e) => setCodigoIndex(e.target.value)} className={inputStyles}>
                 <option value="">Elegí un modelo…</option>
-                {VEHICULOS.map((v, i) => (
+                {vehiculos.map((v, i) => (
                   <option key={`${v.codigo}-${i}`} value={i}>
                     {v.modelo}
                   </option>
@@ -76,7 +99,6 @@ export function Presupuesto() {
               </button>
             </div>
           )}
-          <p className="mt-2 text-xs text-slate-400">{LISTA_VIGENTE}</p>
         </Card>
       )}
 
@@ -92,7 +114,7 @@ export function Presupuesto() {
       )}
 
       {operacion === "financiada" && vehiculo && precio > 0 && (
-        <Financiada vehiculo={vehiculo} precio={precio} anticipo={anticipo} onAnticipo={setAnticipo} />
+        <Financiada vehiculo={vehiculo} productos={productos} precio={precio} anticipo={anticipo} onAnticipo={setAnticipo} />
       )}
     </div>
   );
@@ -185,16 +207,18 @@ function Contado({
 
 function Financiada({
   vehiculo,
+  productos,
   precio,
   anticipo,
   onAnticipo,
 }: {
   vehiculo: Vehiculo;
+  productos: Producto[];
   precio: number;
   anticipo: number;
   onAnticipo: (n: number) => void;
 }) {
-  const r = calcularFinanciado(vehiculo, precio, anticipo);
+  const r = calcularFinanciado(vehiculo, precio, anticipo, productos);
   const promos = r.opciones.filter((o) => o.producto.tipo === "promo");
   const tradicionales = r.opciones.filter((o) => o.producto.tipo === "tradicional");
 

@@ -107,12 +107,17 @@ export function calcularPlazo(
   };
 }
 
-export function calcularFinanciado(vehiculo: Vehiculo, precio: number, anticipoCliente: number): Financiado {
+export function calcularFinanciado(
+  vehiculo: Vehiculo,
+  precio: number,
+  anticipoCliente: number,
+  productos: Producto[] = PRODUCTOS,
+): Financiado {
   const puestoEnCalle = precio + vehiculo.fleteFormularios + vehiculo.patentamiento;
   const sinSaldo = anticipoCliente >= puestoEnCalle;
   const opciones = sinSaldo
     ? []
-    : PRODUCTOS.filter((producto) => aplicaAModelo(producto, vehiculo.modelo)).map((producto) => {
+    : productos.filter((producto) => aplicaAModelo(producto, vehiculo.modelo)).map((producto) => {
         const maximo = montoMaximo(producto, vehiculo, puestoEnCalle);
         return {
           producto,
