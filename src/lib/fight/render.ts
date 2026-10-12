@@ -704,7 +704,7 @@ function drawParticle(g: CanvasRenderingContext2D, p: Particle) {
 
 // ───────────────────────── HUD ─────────────────────────
 
-const TITLE_FONT = "Impact, Haettenschweiler, 'Arial Narrow Bold', 'Arial Black', sans-serif";
+const TITLE_FONT = "Impact, Anton, Haettenschweiler, 'Arial Narrow Bold', 'Arial Black', sans-serif";
 
 function drawHud(g: CanvasRenderingContext2D, state: GameState) {
   const barW = 370;
