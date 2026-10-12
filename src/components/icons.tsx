@@ -49,6 +49,12 @@ export const ChevronRightIcon = (p: IconProps) => (
 export const GripIcon = (p: IconProps) => (
   <Icon {...p}><circle cx="9" cy="6" r="1" /><circle cx="15" cy="6" r="1" /><circle cx="9" cy="12" r="1" /><circle cx="15" cy="12" r="1" /><circle cx="9" cy="18" r="1" /><circle cx="15" cy="18" r="1" /></Icon>
 );
+export const CardsIcon = (p: IconProps) => (
+  <Icon {...p}><rect x="3" y="6" width="11" height="15" rx="1.5" transform="rotate(-10 8.5 13.5)" /><rect x="10" y="3" width="11" height="15" rx="1.5" transform="rotate(10 15.5 10.5)" /></Icon>
+);
+export const TrophyIcon = (p: IconProps) => (
+  <Icon {...p}><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z" /><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4" /><path d="M12 13v4M8 21h8M9.5 17h5" /></Icon>
+);
 
 export function WhatsAppIcon(props: IconProps) {
   return (

@@ -1,6 +1,6 @@
 # CRM de ventas
 
-CRM web simple para gestionar leads de ventas y planificar objetivos mensuales.
+CRM web simple para gestionar leads de ventas y planificar objetivos mensuales. Incluye además un anotador de torneos de truco.
 
 Hecho con **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS 4** y **Prisma + SQLite**. La base de datos es un archivo local, así que no hace falta configurar nada.
 
@@ -58,6 +58,14 @@ La base de datos se guarda en `prisma/dev.db` y está en `.gitignore`.
 - Plan semanal con fechas, días hábiles, plan original, plan ajustado, ventas reales y estado de cada semana: *cumplida*, *en curso*, *atrasada* o *pendiente*.
 - Barra de progreso del mes con el porcentaje.
 
+### Torneos de truco (`/truco`)
+- Crear torneos con nombre, formato, puntos por partido (15, o 30 con malas y buenas) y la lista de equipos (uno por renglón). Opcionalmente se sortea el orden.
+- **Liga (todos contra todos):** el fixture se arma solo por fechas. Con equipos impares, en cada fecha uno queda libre. Tabla de posiciones ordenada por partidos ganados, diferencia de tantos y tantos a favor.
+- **Eliminación directa:** cuadro con cuartos, semis y final. Si los equipos no son 4, 8, 16…, los primeros pasan directo a la segunda ronda. El ganador de cada partido avanza solo.
+- **Anotador** de cada partido con fósforos (cuadrados de a 5), botones grandes de +1 y atajos −1, +2 y +3. Cada toque se guarda al instante.
+- Al llegar a los puntos, el partido termina. Para corregir, restale puntos al ganador; en eliminación se puede solo si el partido siguiente todavía no empezó.
+- La lógica (fixture, cuadro, tabla) está en [`src/lib/truco.ts`](src/lib/truco.ts) con tests en [`tests/truco.test.ts`](tests/truco.test.ts).
+
 ### Inicio (`/`)
 - Progreso del mes actual.
 - Ventas necesarias esta semana (según el plan ajustado) y cuántas llevás.
@@ -84,21 +92,23 @@ Todas las fechas se calculan con la hora de Argentina (`America/Argentina/Buenos
 
 ```
 prisma/
-  schema.prisma          Modelos Lead y MonthlyGoal
-  migrations/            Migración inicial
+  schema.prisma          Modelos Lead, MonthlyGoal, Tournament, Team y Match
+  migrations/            Migraciones (inicial y torneos de truco)
   seed.ts                15 leads de ejemplo y objetivo del mes actual
 src/
   app/
     page.tsx             Inicio
     leads/               Kanban y tabla, alta, edición y server actions
     objetivos/           Plan mensual y server action del objetivo
+    truco/               Torneos, anotador y server actions
   components/            Componentes de interfaz
   lib/
     planning.ts          Semanas, reparto y replanificación
     phone.ts             Validación y formato de teléfonos argentinos
     stages.ts            Etapas y regla de la fecha de venta
     dates.ts             Fechas en hora de Argentina
-    goals.ts, leads.ts   Consultas a la base de datos
+    truco.ts             Fixture, cuadro de eliminación y tabla de posiciones
+    goals.ts, leads.ts, tournaments.ts   Consultas a la base de datos
     db.ts                Cliente de Prisma
 tests/                   Tests unitarios (Vitest)
 ```
