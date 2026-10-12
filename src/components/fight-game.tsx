@@ -23,7 +23,7 @@ import {
   type GameState,
   type Input,
 } from "@/lib/fight/engine";
-import { render } from "@/lib/fight/render";
+import { FightRenderer, TITLE_FONT, drawPortrait } from "@/lib/fight/render";
 
 type Mode = "cpu" | "versus";
 
@@ -83,6 +83,7 @@ export function FightGame() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<GameState | null>(null);
+  const configRef = useRef<Config | null>(null);
   const keysRef = useRef(new Set<string>());
   // Teclas apretadas desde el último paso: así un toque rapidísimo (bajar y soltar entre dos cuadros) no se pierde.
   const tappedRef = useRef(new Set<string>());
@@ -105,6 +106,7 @@ export function FightGame() {
     update();
     query.addEventListener("change", update);
     audioRef.current = new FightAudio();
+    void document.fonts?.load(`40px ${TITLE_FONT}`).catch(() => {});
     return () => {
       query.removeEventListener("change", update);
       audioRef.current?.dispose();
@@ -127,6 +129,7 @@ export function FightGame() {
 
   const backToMenu = useCallback(() => {
     gameRef.current = null;
+    configRef.current = null;
     pausedRef.current = false;
     setPaused(false);
     setMatchOver(false);
@@ -169,8 +172,8 @@ export function FightGame() {
   }, [config, togglePause, rematch]);
 
   // Bucle principal: lógica a 60 pasos fijos por segundo, dibujo en cada frame.
+  // Sin partida en curso, dos CPUs pelean de fondo detrás del menú.
   useEffect(() => {
-    if (!config) return;
     const canvas = canvasRef.current;
     const g = canvas?.getContext("2d");
     if (!canvas || !g) return;
@@ -178,48 +181,60 @@ export function FightGame() {
     canvas.width = STAGE.width * dpr;
     canvas.height = STAGE.height * dpr;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    gameRef.current = createGame(config.p1, config.p2);
+    const renderer = new FightRenderer(g, dpr);
+    let demo = createGame("kaen", "kori", 7);
     let raf = 0;
     let last = performance.now();
     let acc = 0;
 
     const frame = (now: number) => {
-      const game = gameRef.current;
-      if (!game) return;
       acc += Math.min(100, now - last);
       last = now;
       if (pausedRef.current) acc = 0;
+      const game = gameRef.current;
+      const config = configRef.current;
       while (acc >= STEP_MS) {
         acc -= STEP_MS;
-        const keys = new Set([...keysRef.current, ...tappedRef.current]);
-        tappedRef.current.clear();
-        const touchInput = touchRef.current;
-        let in1: Input;
-        let in2: Input;
-        if (config.mode === "cpu") {
-          in1 = merge(readKeys(keys, P1_KEYS, P2_KEYS), touchInput);
-          in2 = cpuInput(game, 1, config.difficulty);
+        if (game && config) {
+          const keys = new Set([...keysRef.current, ...tappedRef.current]);
+          tappedRef.current.clear();
+          const touchInput = touchRef.current;
+          let in1: Input;
+          let in2: Input;
+          if (config.mode === "cpu") {
+            in1 = merge(readKeys(keys, P1_KEYS, P2_KEYS), touchInput);
+            in2 = cpuInput(game, 1, config.difficulty);
+          } else {
+            in1 = merge(readKeys(keys, P1_KEYS), touchInput);
+            in2 = readKeys(keys, P2_KEYS);
+          }
+          const before = game.phase;
+          step(game, [in1, in2]);
+          audioRef.current?.play(game.events);
+          renderer.onEvents(game.events, game);
+          if (game.phase !== before && game.phase === "matchOver") setMatchOver(true);
         } else {
-          in1 = merge(readKeys(keys, P1_KEYS), touchInput);
-          in2 = readKeys(keys, P2_KEYS);
+          step(demo, [cpuInput(demo, 0, "normal"), cpuInput(demo, 1, "normal")]);
+          renderer.onEvents(demo.events, demo);
+          if (demo.phase === "matchOver" && demo.phaseFrame > 240) demo = createGame("kaen", "kori", demo.seed);
         }
-        const before = game.phase;
-        step(game, [in1, in2]);
-        audioRef.current?.play(game.events);
-        if (game.phase !== before && game.phase === "matchOver") setMatchOver(true);
       }
-      render(g, game);
+      renderer.render(game && config ? game : demo);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [config]);
+  }, []);
 
   const start = () => {
     audioRef.current?.unlock();
+    const next = { mode, p1, p2: OTHER[p1], difficulty };
+    configRef.current = next;
+    gameRef.current = createGame(next.p1, next.p2);
+    pausedRef.current = false;
+    setPaused(false);
     setMatchOver(false);
-    setConfig({ mode, p1, p2: OTHER[p1], difficulty });
+    setConfig(next);
   };
 
   const toggleMute = () => {
@@ -247,6 +262,9 @@ export function FightGame() {
 
   return (
     <div className="space-y-4">
+      {/* Tipografía de los carteles del juego (FIGHT!, FATALITY…); solo la usa esta página. */}
+      {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" precedence="default" />
       <div
         ref={wrapperRef}
         className="relative overflow-hidden rounded-2xl bg-black shadow-xl ring-1 ring-black/10 [&:fullscreen]:flex [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:rounded-none"
@@ -268,7 +286,7 @@ export function FightGame() {
 
           {config && paused && (
             <Overlay>
-              <p className="font-[Impact,sans-serif] text-5xl tracking-wide text-amber-300 md:text-7xl">PAUSA</p>
+              <p className="font-[Anton,Impact,sans-serif] text-5xl tracking-wide text-amber-300 md:text-7xl">PAUSA</p>
               <div className="flex gap-3">
                 <OverlayButton onClick={togglePause}>Seguir</OverlayButton>
                 <OverlayButton onClick={backToMenu} secondary>
@@ -349,7 +367,7 @@ function Menu(props: {
   return (
     <Overlay>
       <div className="text-center">
-        <h2 className="bg-gradient-to-b from-amber-200 via-amber-400 to-red-700 bg-clip-text font-[Impact,sans-serif] text-4xl tracking-wider text-transparent md:text-7xl">
+        <h2 className="bg-gradient-to-b from-amber-200 via-amber-400 to-red-700 bg-clip-text font-[Anton,Impact,sans-serif] text-4xl tracking-wider text-transparent md:text-7xl">
           COMBATE FINAL
         </h2>
         <p className="mt-1 text-xs text-slate-300 md:text-sm">Elegí tu luchador</p>
@@ -367,8 +385,8 @@ function Menu(props: {
               aria-pressed={selected}
               className="group flex w-28 flex-col items-center gap-1 rounded-xl border-2 border-white/15 bg-black/40 p-2 transition aria-pressed:border-amber-400 aria-pressed:bg-white/10 md:w-40 md:p-3"
             >
-              <Mask color={ch.colors.main} glow={ch.colors.glow} />
-              <span className="font-[Impact,sans-serif] text-lg tracking-wide text-white md:text-2xl">{ch.name}</span>
+              <Portrait char={id} />
+              <span className="font-[Anton,Impact,sans-serif] text-lg tracking-wide text-white md:text-2xl">{ch.name}</span>
               <span className="text-[10px] text-slate-300 md:text-xs">{ch.specialName}</span>
               {mode === "versus" && (
                 <span className="mt-0.5 rounded bg-white/10 px-1.5 text-[10px] font-semibold text-amber-300">{selected ? "J1" : "J2"}</span>
@@ -395,15 +413,20 @@ function Menu(props: {
   );
 }
 
-function Mask({ color, glow }: { color: string; glow: string }) {
-  return (
-    <svg viewBox="0 0 40 40" className="size-12 md:size-20" aria-hidden="true">
-      <circle cx="20" cy="20" r="17" fill={color} />
-      <ellipse cx="20" cy="18" rx="12" ry="5" fill="#15131a" />
-      <rect x="11" y="16.5" width="18" height="3" rx="1.5" fill="#fff" style={{ filter: `drop-shadow(0 0 2px ${glow})` }} />
-      <path d="M8 24 Q20 34 32 24 Q20 28 8 24Z" fill="#15131a" opacity="0.6" />
-    </svg>
-  );
+function Portrait({ char }: { char: CharacterId }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const c = ref.current;
+    const g = c?.getContext("2d");
+    if (!c || !g) return;
+    const size = 96;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = size * dpr;
+    c.height = size * dpr;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawPortrait(g, char, size / 2, size / 2, size / 2 - 2);
+  }, [char]);
+  return <canvas ref={ref} className="size-12 md:size-20" aria-hidden="true" />;
 }
 
 function Segmented<T extends string>({ value, onChange, options }: { value: T; onChange: (v: T) => void; options: { id: T; label: string }[] }) {
@@ -426,7 +449,7 @@ function Segmented<T extends string>({ value, onChange, options }: { value: T; o
 
 function Overlay({ children }: { children: ReactNode }) {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/70 p-3 backdrop-blur-[2px] md:gap-6">
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/55 p-3 backdrop-blur-[2px] md:gap-6">
       {children}
     </div>
   );
@@ -439,7 +462,7 @@ function OverlayButton({ secondary, ...props }: ComponentProps<"button"> & { sec
       className={
         secondary
           ? "rounded-lg border border-white/30 bg-black/50 px-4 py-2 text-sm font-semibold text-white hover:bg-black/70 md:px-6 md:text-base"
-          : "rounded-lg bg-gradient-to-b from-amber-300 to-red-600 px-5 py-2 font-[Impact,sans-serif] text-lg tracking-wider text-white shadow-lg ring-1 ring-black/40 hover:brightness-110 md:px-8 md:text-2xl"
+          : "rounded-lg bg-gradient-to-b from-amber-300 to-red-600 px-5 py-2 font-[Anton,Impact,sans-serif] text-lg tracking-wider text-white shadow-lg ring-1 ring-black/40 hover:brightness-110 md:px-8 md:text-2xl"
       }
       {...props}
     />

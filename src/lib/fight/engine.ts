@@ -169,8 +169,8 @@ export interface Particle {
 export type Phase = "intro" | "fight" | "roundOver" | "finish" | "fatality" | "matchOver";
 
 export type GameEvent =
-  | { type: "hit"; heavy: boolean }
-  | { type: "block" }
+  | { type: "hit"; heavy: boolean; side: 0 | 1; x: number; y: number }
+  | { type: "block"; x: number; y: number }
   | { type: "swing" }
   | { type: "special"; element: Element }
   | { type: "freeze" }
@@ -207,6 +207,8 @@ export interface GameState {
   timer: number;
   tick: number;
   hitstop: number;
+  /** Cuadros de cámara lenta restantes (el K.O. se ve a 1/3 de velocidad). */
+  slowmo: number;
   shake: number;
   banner: Banner | null;
   winner: 0 | 1 | null;
@@ -272,6 +274,7 @@ export function createGame(p1: CharacterId, p2: CharacterId, seed = Date.now()):
     timer: ROUND_FRAMES,
     tick: 0,
     hitstop: 0,
+    slowmo: 0,
     shake: 0,
     banner: null,
     winner: null,
@@ -337,6 +340,7 @@ function hurtHeight(f: Fighter) {
 
 export function step(state: GameState, inputs: [Input, Input]) {
   state.events = [];
+  if (state.slowmo > 0 && state.slowmo-- % 3 !== 0) return;
   state.tick++;
   updateParticles(state);
   for (const f of state.fighters) {
@@ -575,7 +579,7 @@ function applyHit(state: GameState, attackerSide: 0 | 1, d: Fighter, hit: HitInf
     d.hp = Math.max(1, d.hp - Math.max(1, Math.round(hit.damage * 0.15)));
     d.vx = hit.dir * 3;
     state.hitstop = 3;
-    state.events.push({ type: "block" });
+    state.events.push({ type: "block", x: screenX, y: screenY });
     spawnBurst(state, screenX, screenY, "spark", 8, "#bfe3ff", 4);
     return;
   }
@@ -585,7 +589,7 @@ function applyHit(state: GameState, attackerSide: 0 | 1, d: Fighter, hit: HitInf
   d.flash = 6;
   state.hitstop = heavy ? 7 : 4;
   state.shake = Math.max(state.shake, heavy ? 10 : 4);
-  state.events.push({ type: "hit", heavy });
+  state.events.push({ type: "hit", heavy, side: attackerSide, x: screenX, y: screenY });
   spawnBurst(state, screenX, screenY, "spark", 6, "#fff2b0", 5);
   spawnBlood(state, screenX, screenY, hit.dir, 6 + hit.damage);
   if (hit.element === "fuego") spawnBurst(state, screenX, screenY, "fire", 14, "#ff8a1a", 4);
@@ -664,7 +668,7 @@ function updateProjectiles(state: GameState) {
     const x = (remaining[0].x + remaining[1].x) / 2;
     spawnBurst(state, x, STAGE.floor - 125, "spark", 20, "#ffffff", 6);
     spawnBurst(state, x, STAGE.floor - 125, "smoke", 10, "#8d8d99", 2);
-    state.events.push({ type: "block" });
+    state.events.push({ type: "block", x, y: STAGE.floor - 125 });
     state.projectiles = [];
     return;
   }
@@ -701,6 +705,7 @@ function handleKO(state: GameState, winnerSide: 0 | 1) {
   state.winner = winnerSide;
   state.projectiles = [];
   state.events.push({ type: "ko" });
+  state.slowmo = 90;
   if (winner.wins >= ROUNDS_TO_WIN) {
     // El perdedor se levanta mareado: FINISH HIM.
     loser.hp = 0;

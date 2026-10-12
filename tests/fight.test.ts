@@ -114,7 +114,7 @@ describe("motor de pelea", () => {
     attack(state, 0, { punch: true });
     expect(state.phase).toBe("roundOver");
     expect(state.fighters[0].wins).toBe(1);
-    run(state, 200);
+    for (let i = 0; i < 400 && state.round === 1; i++) run(state, 1);
     expect(state.round).toBe(2);
     expect(state.fighters[1].hp).toBe(MAX_HP);
   });
@@ -148,7 +148,7 @@ describe("motor de pelea", () => {
     state.fighters[0].wins = 1;
     state.fighters[1].hp = 3;
     attack(state, 0, { punch: true });
-    run(state, FINISH_FRAMES);
+    run(state, FINISH_FRAMES + 120); // + la cámara lenta del K.O.
     expect(state.phase).toBe("matchOver");
     expect(state.fatality).toBe(false);
   });

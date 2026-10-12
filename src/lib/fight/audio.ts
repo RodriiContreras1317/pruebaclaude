@@ -71,9 +71,11 @@ export class FightAudio {
           this.say("Fight!");
           break;
         case "finish":
+          this.thunder();
           this.say("Finish him!");
           break;
         case "fatality":
+          this.thunder();
           this.tone(55, 50, 1.4, "sawtooth", 0.25);
           this.say("Fatality!");
           break;
@@ -122,6 +124,12 @@ export class FightAudio {
     gain.gain.value = volume;
     src.connect(filter).connect(gain).connect(this.master);
     src.start();
+  }
+
+  /** Trueno: ruido grave que crece y se apaga lento. */
+  private thunder() {
+    this.noise(2.2, 260, 1.1);
+    this.tone(48, 30, 1.8, "sine", 0.5, 0.05);
   }
 
   private say(text: string) {
