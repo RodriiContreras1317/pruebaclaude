@@ -1833,8 +1833,8 @@ export class FightRenderer {
       const lx = p.x - ox + SPRITE_OX;
       const ly = FLOOR - p.y - oy + SPRITE_OY;
       const color = p.element === "fuego" ? "255,140,40" : "120,210,255";
-      const pg = g.createRadialGradient(lx, ly, 10, lx, ly, 170);
-      pg.addColorStop(0, `rgba(${color},0.55)`);
+      const pg = g.createRadialGradient(lx, ly, 10, lx, ly, 150);
+      pg.addColorStop(0, `rgba(${color},0.32)`);
       pg.addColorStop(1, `rgba(${color},0)`);
       g.fillStyle = pg;
       g.fillRect(0, 0, SPRITE_W, SPRITE_H);
