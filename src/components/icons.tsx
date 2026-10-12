@@ -28,6 +28,9 @@ export const UsersIcon = (p: IconProps) => (
 export const TargetIcon = (p: IconProps) => (
   <Icon {...p}><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /></Icon>
 );
+export const SwordsIcon = (p: IconProps) => (
+  <Icon {...p}><path d="M14.5 17.5 3 6V3h3l11.5 11.5" /><path d="m13 19 6-6" /><path d="m16 16 4 4" /><path d="M19 21l2-2" /><path d="M9.5 6.5 14 2h3v3l-4.5 4.5" /><path d="m5 14 4 4" /><path d="m7 17-3 3" /><path d="M3 19l2 2" /></Icon>
+);
 export const PlusIcon = (p: IconProps) => (
   <Icon {...p}><path d="M12 5v14M5 12h14" /></Icon>
 );
